@@ -10,7 +10,9 @@ const {
   userData,
 } = require("../db/data/test-data/index");
 
-beforeEach(() => seed({ articleData, commentData, topicData, userData }));
+const testData = { articleData, commentData, topicData, userData };
+
+beforeEach(() => seed(testData));
 
 afterAll(() => db.end());
 

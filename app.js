@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-const { getCategories } = require("./controllers/categoriesController");
+const {
+  getCategories,
+  getReview,
+} = require("./controllers/categoriesController");
 
 app.get("/api/categories", getCategories);
+
+app.get("/api/reviews/:review_id", getReview);
 
 // app.use((err, req, res, next) => {
 //   if (err.status && err.message) {
