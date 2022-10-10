@@ -1,6 +1,6 @@
 const db = require("../db/connection.js");
 
-exports.fetchCategories = () => {
+exports.fetchTopics = () => {
   return db
     .query("SELECT * FROM topics")
 
@@ -10,9 +10,15 @@ exports.fetchCategories = () => {
 };
 
 exports.fetchReview = (review_id) => {
-  return db.query(`SELECT * FROM articles
-  JOIN comments
-  ON `);
+  return db
+    .query(
+      `SELECT * FROM articles WHERE article_id =$1, [review_id]
+   `
+    )
+    .then((data) => {
+      console.log(data);
+      return data;
+    });
 };
 
 // .query(
