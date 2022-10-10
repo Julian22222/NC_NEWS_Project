@@ -1,4 +1,4 @@
-const { fetchTopics, fetchReview } = require("../models/categoriesModels");
+const { fetchTopics, fetchArticleId } = require("../models/categoriesModels");
 
 exports.getTopics = (request, response, next) => {
   fetchTopics().then((category) => {
@@ -6,9 +6,9 @@ exports.getTopics = (request, response, next) => {
   });
 };
 
-exports.getReview = (request, response, next) => {
-  const { review_id } = request.params;
-  fetchReview(review_id).then((data) => {
-    response.status(200).send(data);
+exports.getArticleId = (request, response, next) => {
+  const { article_id } = request.params;
+  fetchArticleId(article_id).then((article) => {
+    response.status(200).send(article);
   });
 };

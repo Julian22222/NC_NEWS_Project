@@ -5,19 +5,19 @@ exports.fetchTopics = () => {
     .query("SELECT * FROM topics")
 
     .then(({ rows }) => {
+      //.then((data)=>{
+      //return data.rows
+      // })
       return rows;
     });
 };
 
-exports.fetchReview = (review_id) => {
+exports.fetchArticleId = (article_id) => {
   return db
-    .query(
-      `SELECT * FROM articles WHERE article_id =$1, [review_id]
-   `
-    )
-    .then((data) => {
-      console.log(data);
-      return data;
+    .query(`SELECT * FROM articles WHERE article_id =$1;`, [article_id])
+    .then(({ rows }) => {
+      // console.log(rows);
+      return rows[0];
     });
 };
 

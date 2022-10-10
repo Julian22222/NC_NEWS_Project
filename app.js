@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-const { getTopics, getReview } = require("./controllers/topicsController");
+const { getTopics, getArticleId } = require("./controllers/topicsController");
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/reviews/:review_id", getReview);
+app.get("/api/articles/:article_id", getArticleId);
 
 // app.use((err, req, res, next) => {
 //   if (err.status && err.message) {
