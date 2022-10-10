@@ -1,7 +1,7 @@
-const { fetchCategories, fetchReview } = require("../models/categoriesModels");
+const { fetchTopics, fetchReview } = require("../models/categoriesModels");
 
-exports.getCategories = (request, response, next) => {
-  fetchCategories().then((category) => {
+exports.getTopics = (request, response, next) => {
+  fetchTopics().then((category) => {
     response.status(200).send({ category });
   });
 };
