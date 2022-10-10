@@ -45,17 +45,18 @@ afterAll(() => db.end());
 //     });
 //   });
 // });
+//
 
-describe("get /api/categories", () => {
-  test("200: responds with array of categories", () => {
+describe("get /api/topics", () => {
+  test("200: responds with array of topics", () => {
     return request(app)
-      .get("/api/categories")
+      .get("/api/topics")
       .expect(200)
       .then((response) => {
         const {
           body: { category },
         } = response;
-        console.log(category);
+        // console.log(category);
         expect(category).toHaveLength(3);
         expect(Array.isArray(category)).toBe(true);
         category.forEach((eachCategory) => {
@@ -70,10 +71,10 @@ describe("get /api/categories", () => {
   });
 });
 
-describe("get /api/categories", () => {
+describe("get /api/topics", () => {
   test("should return all 3 topics", () => {
     return request(app)
-      .get("/api/categories")
+      .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual({
