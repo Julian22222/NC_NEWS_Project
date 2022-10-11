@@ -166,19 +166,68 @@ describe("test4.get /api/articles/:article_id", () => {
   });
 });
 
+// KIRIL
+// describe("test5 get /api/users", () => {
+//   test("status:200, responds with an array of test users objects", () => {
+//     return request(app)
+//       .get("/api/users")
+//       .expect(200)
+//       .then((response) => {
+//         const {
+//           body: { users },
+//         } = response;
+//         expect(users).toBeInstanceOf(Array);
+//         expect(users).toHaveLength(4);
+//         users.forEach((user) => {
+//           expect(user).toEqual(
+//             expect.objectContaining({
+//               username: expect.any(String),
+//               name: expect.any(String),
+//               avatar_url: expect.any(String),
+//             })
+//           );
+//         });
+//         expect(users).toEqual([
+//           {
+//             avatar_url:
+//               "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+//             name: "jonny",
+//             username: "butter_bridge",
+//           },
+//           {
+//             avatar_url:
+//               "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+//             name: "sam",
+//             username: "icellusedkars",
+//           },
+//           {
+//             avatar_url:
+//               "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+//             name: "paul",
+//             username: "rogersop",
+//           },
+//           {
+//             avatar_url:
+//               "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+//             name: "do_nothing",
+//             username: "lurker",
+//           },
+//         ]);
+//       });
+//   });
+// });
+
 describe("test5.get /api/users", () => {
   test("200: responds with array of users", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
-      .then((users) => {
-        // console.log(response);
-        // console.log(category);
-        expect(users).toHaveLength(6);
-        expect(Array.isArray(users)).toBe(true);
-        //expext(.....)toBeInstanceOf(Array)
-        users.forEach((eachUser) => {
-          expect(eachUser).toEqual(
+      .then((response) => {
+        console.log(response.body);
+        expect(response.body.users).toBeInstanceOf(Array);
+        expect(response.body.users).toHaveLength(4);
+        response.body.users.forEach((user) => {
+          expect(user).toEqual(
             expect.objectContaining({
               username: expect.any(String),
               name: expect.any(String),
@@ -190,28 +239,39 @@ describe("test5.get /api/users", () => {
   });
 });
 
-// describe("test5.get /api/users", () => {
-//   test("should return all users", () => {
-//     return request(app)
-//       .get("/api/users")
-//       .expect(200)
-//       .then(({ body }) => {
-//         expect(body).toEqual({
-//           category: [
-//             {
-//               description: "The man, the Mitch, the legend",
-//               slug: "mitch",
-//             },
-//             {
-//               description: "Not dogs",
-//               slug: "cats",
-//             },
-//             {
-//               description: "what books are made of",
-//               slug: "paper",
-//             },
-//           ],
-//         });
-//       });
-//   });
-// });
+describe("test5.get /api/users", () => {
+  test("should return 4 users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        // console.log(response.body);
+        expect(response.body.users).toEqual([
+          {
+            avatar_url:
+              "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+            name: "jonny",
+            username: "butter_bridge",
+          },
+          {
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+            name: "sam",
+            username: "icellusedkars",
+          },
+          {
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+            name: "paul",
+            username: "rogersop",
+          },
+          {
+            avatar_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            name: "do_nothing",
+            username: "lurker",
+          },
+        ]);
+      });
+  });
+});
