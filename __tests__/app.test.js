@@ -124,6 +124,28 @@ describe("test4.get /api/articles/:article_id", () => {
   });
 });
 
+describe("test4. Handling psql errror for /api/articles/banana", () => {
+  test("status:400, retorn an error message when passed article id that is of an invalid type ' ", () => {
+    return request(app)
+      .get("/api/articles/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid article id");
+      });
+  });
+});
+
+describe("test4. Handling for /api/articles/9999", () => {
+  test("status:404, retorn an error message when passed article id that doesn't exist in database' ", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Id not found");
+      });
+  });
+});
+
 describe("test4.get /api/articles/:article_id", () => {
   test("should respond with an correct article id", () => {
     return request(app)
@@ -143,3 +165,53 @@ describe("test4.get /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("test5.get /api/users", () => {
+  test("200: responds with array of users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((users) => {
+        // console.log(response);
+        // console.log(category);
+        expect(users).toHaveLength(6);
+        expect(Array.isArray(users)).toBe(true);
+        //expext(.....)toBeInstanceOf(Array)
+        users.forEach((eachUser) => {
+          expect(eachUser).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
+
+// describe("test5.get /api/users", () => {
+//   test("should return all users", () => {
+//     return request(app)
+//       .get("/api/users")
+//       .expect(200)
+//       .then(({ body }) => {
+//         expect(body).toEqual({
+//           category: [
+//             {
+//               description: "The man, the Mitch, the legend",
+//               slug: "mitch",
+//             },
+//             {
+//               description: "Not dogs",
+//               slug: "cats",
+//             },
+//             {
+//               description: "what books are made of",
+//               slug: "paper",
+//             },
+//           ],
+//         });
+//       });
+//   });
+// });
