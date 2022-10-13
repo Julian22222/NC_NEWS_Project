@@ -1,4 +1,8 @@
-const { fetchArticleId, updatedVote } = require("../models/articleModels");
+const {
+  fetchArticleId,
+  updatedVote,
+  listOfArticles,
+} = require("../models/articleModels");
 
 exports.getArticleId = (request, response, next) => {
   const { article_id } = request.params;
@@ -17,6 +21,18 @@ exports.patchArticleId = (request, response, next) => {
   updatedVote(article_id, inc_votes)
     .then((rows) => {
       response.status(201).send(rows[0]);
+    })
+    .catch(next);
+};
+
+exports.getAllArticles = (request, response, next) => {
+  const {
+    query: { topic },
+  } = request;
+  // console.log(topic);
+  listOfArticles(topic)
+    .then((rows) => {
+      response.status(200).send(rows);
     })
     .catch(next);
 };

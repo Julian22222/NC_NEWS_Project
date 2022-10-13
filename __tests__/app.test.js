@@ -252,3 +252,69 @@ test("should respond with an correct article id", () => {
       });
     });
 });
+
+describe("test8.get /api/articles", () => {
+  test("200: responds with an array of all objects including all the data", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body).toBeInstanceOf(Array);
+        expect(body).toHaveLength(12);
+        body.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+});
+test("200: responds with an array of only cats object articles, when filtering", () => {
+  return request(app)
+    .get(`/api/articles?topic=cats`)
+    .expect(200)
+    .then(({ body }) => {
+      // console.log(body);
+      expect(body).toBeInstanceOf(Array);
+      body.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            topic: "cats",
+          })
+        );
+      });
+    });
+});
+test("200: responds with an array of only mitch object articles, when filtering", () => {
+  return request(app)
+    .get(`/api/articles?topic=mitch`)
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toBeInstanceOf(Array);
+      body.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            topic: "mitch",
+          })
+        );
+      });
+    });
+});
+test("200: insert not existing topic and responds with a message- Invalid topic value ", () => {
+  return request(app)
+    .get(`/api/articles?topic=banana`)
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Invalid topic value");
+    });
+});
