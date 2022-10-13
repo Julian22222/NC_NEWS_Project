@@ -284,7 +284,6 @@ test("200: responds with an array of only cats object articles, when filtering",
     .get(`/api/articles?topic=cats`)
     .expect(200)
     .then(({ body }) => {
-      // console.log(body);
       expect(body).toBeInstanceOf(Array);
       body.forEach((article) => {
         expect(article).toEqual(
@@ -310,11 +309,61 @@ test("200: responds with an array of only mitch object articles, when filtering"
       });
     });
 });
-test("200: insert not existing topic and responds with a message- Invalid topic value ", () => {
+test("200: responds with an array of valid topic which has no articles.", () => {
+  return request(app)
+    .get(`/api/articles?topic=paper`)
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toBeInstanceOf(Array);
+      body.forEach((article) => {
+        expect(article).toEqual({});
+      });
+    });
+});
+
+test("400: insert not existing topic and responds with a message- Invalid topic value ", () => {
   return request(app)
     .get(`/api/articles?topic=banana`)
     .expect(400)
     .then(({ body }) => {
       expect(body.msg).toBe("Invalid topic value");
+    });
+});
+describe("test9.get /api/articles/:article_id/comments", () => {
+  test("200: responds with an array of comments of certain article id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment).toBeInstanceOf(Array);
+        expect(comment).toHaveLength(11);
+        comment.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
+test("status:404, Handling for /api/articles/9999/comments, return an error message when passed article id that doesn't exist in database' ", () => {
+  return request(app)
+    .get("/api/articles/9999/comments")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Id not found");
+    });
+});
+test("status:400, Handling psql errror for /api/articles/banana/comments, return an error message when passed article id that is of an invalid type ' ", () => {
+  return request(app)
+    .get("/api/articles/banana/comments")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad request, invalid article id");
     });
 });
