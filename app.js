@@ -17,7 +17,6 @@ app.get("/api/users", getUsers);
 app.patch("/api/articles/:article_id", patchArticleId);
 
 app.use((err, req, res, next) => {
-  //   console.log(err.code);
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad request, invalid article id" });
   } else {
