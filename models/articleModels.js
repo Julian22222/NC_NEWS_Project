@@ -52,3 +52,37 @@ exports.updatedVote = (article_id, inc_votes) => {
       });
   }
 };
+
+exports.listOfArticles = (topic) => {
+  const topicNames = ["cats", "mitch", undefined];
+  if (!topicNames.includes(topic)) {
+    return Promise.reject({ status: 400, msg: "Invalid topic value" });
+  }
+
+  if (!topic) {
+    return db
+      .query(
+        `SELECT articles.*, COUNT(comments.article_id) ::INT AS comment_count
+        FROM articles
+        LEFT JOIN comments ON articles.article_id=comments.article_id
+        GROUP BY articles.article_id
+        ORDER BY created_at DESC; `
+      )
+      .then(({ rows }) => {
+        return rows;
+      });
+  } else if (topic === "cats" || "mitch") {
+    return db
+      .query(
+        `SELECT articles.*, COUNT(comments.article_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments ON articles.article_id=comments.article_id
+    WHERE articles.topic = '${topic}'
+    GROUP BY articles.article_id
+    ORDER BY created_at DESC; `
+      )
+      .then(({ rows }) => {
+        return rows;
+      });
+  }
+};

@@ -5,6 +5,7 @@ const { getTopics } = require("./controllers/topicsController");
 const {
   getArticleId,
   patchArticleId,
+  getAllArticles,
 } = require("./controllers/articleController");
 const { getUsers } = require("./controllers/usersController");
 
@@ -15,6 +16,8 @@ app.get("/api/articles/:article_id", getArticleId);
 app.get("/api/users", getUsers);
 
 app.patch("/api/articles/:article_id", patchArticleId);
+
+app.get("/api/articles", getAllArticles);
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
