@@ -2,7 +2,6 @@ const {
   fetchArticleId,
   updatedVote,
   listOfArticles,
-  commentsById,
 } = require("../models/articleModels");
 
 exports.getArticleId = (request, response, next) => {
@@ -27,18 +26,20 @@ exports.patchArticleId = (request, response, next) => {
 };
 
 exports.getAllArticles = (request, response, next) => {
-  listOfArticles(request.query.topic)
+  const {
+    query: { topic },
+  } = request;
+  listOfArticles(topic)
     .then((rows) => {
       response.status(200).send(rows);
     })
     .catch(next);
 };
 
-exports.getComments = (request, response, next) => {
-  const { article_id } = request.params;
-  commentsById(article_id)
-    .then((comment) => {
-      response.status(200).send({ comment });
-    })
-    .catch(next);
-};
+// exports.getAllArticles = (request, response, next) => {
+//   listOfArticles(request.query.topic)
+//     .then((rows) => {
+//       response.status(200).send(rows);
+//     })
+//     .catch(next);
+// };

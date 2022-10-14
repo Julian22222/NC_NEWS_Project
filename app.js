@@ -6,9 +6,12 @@ const {
   getArticleId,
   patchArticleId,
   getAllArticles,
-  getComments,
 } = require("./controllers/articleController");
 const { getUsers } = require("./controllers/usersController");
+const {
+  getComments,
+  postComments,
+} = require("./controllers/commentsController");
 
 app.get("/api/topics", getTopics);
 
@@ -22,9 +25,15 @@ app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
+app.post("/api/articles/:article_id/comments", postComments);
+
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad request, invalid article id" });
+  } else if (err.code === "23503") {
+    res.status(404).send({ msg: "Not Found" });
+  } else if (err.code === "23502") {
+    res.status(400).send({ msg: "Missing required fields" });
   } else {
     next(err);
   }
@@ -39,6 +48,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   res.status(500).send({ msg: "internal server error" });
 });
 
