@@ -53,26 +53,49 @@ exports.updatedVote = (article_id, inc_votes) => {
   }
 };
 
-exports.listOfArticles = (topic) => {
-  const topicNames = ["cats", "mitch", "paper"];
-  if (topic && !topicNames.includes(topic)) {
+exports.listOfArticles = (sort_by = "created_at", order = "desc", topic) => {
+  const articleSortBy = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  // console.log(articleSortBy.includes(sort_by));
+  const validOrder = ["asc", "desc"];
+  const topicNames = ["cats", "mitch", "paper", undefined];
+
+  if (!topicNames.includes(topic)) {
     return Promise.reject({ status: 400, msg: "Invalid topic value" });
   }
 
-  let query = `SELECT articles.*, COUNT(comments.article_id) ::INT AS comment_count
+  if (!articleSortBy.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Invalid sort_by value" });
+  }
+
+  if (!validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order value" });
+  }
+
+  let startquery = `SELECT articles.*, COUNT(comments.article_id) ::INT AS comment_count
   FROM articles
   LEFT JOIN comments ON articles.article_id=comments.article_id `;
 
-  const topicArr = [];
+  let midQuery = ` `;
 
-  if (topic) {
-    query += `WHERE topic= $1 `;
-    topicArr.push(topic);
+  if (topic !== undefined) {
+    midQuery = `WHERE topic= '${topic}' `;
   }
 
-  query += `GROUP BY articles.article_id
-  ORDER BY created_at DESC;`;
-  return db.query(query, topicArr).then(({ rows }) => {
+  let endquery = `GROUP BY articles.article_id
+  ORDER BY ${sort_by} ${order};`;
+
+  let fullQuery = startquery + midQuery + endquery;
+
+  return db.query(fullQuery).then(({ rows }) => {
     console.log(rows);
     return rows;
   });
