@@ -27,9 +27,10 @@ exports.patchArticleId = (request, response, next) => {
 
 exports.getAllArticles = (request, response, next) => {
   const {
-    query: { topic },
+    query: { sort_by, order, topic },
   } = request;
-  listOfArticles(topic)
+  // console.log(request.query);
+  listOfArticles(sort_by, order, topic)
     .then((rows) => {
       response.status(200).send(rows);
     })

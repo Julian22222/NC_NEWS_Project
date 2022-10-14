@@ -25,12 +25,12 @@ exports.commentsById = (article_id) => {
 };
 
 exports.addComment = (newComment, article_id) => {
-  //   if (newComment.body !== "string") {
-  //     return Promise.reject({
-  //       status: 400,
-  //       msg: "Invalid input",
-  //     });
-  //   }
+  if (typeof newComment.body !== "string") {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid input",
+    });
+  }
 
   return db
     .query(
@@ -41,4 +41,10 @@ exports.addComment = (newComment, article_id) => {
     .then(({ rows }) => {
       return rows;
     });
+};
+
+exports.removeComment = (comment_id) => {
+  return db
+    .query("DELETE FROM comments WHERE comment_id = $1;", [comment_id])
+    .then(() => {});
 };
