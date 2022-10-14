@@ -370,83 +370,97 @@ test("status:400, Handling psql errror for /api/articles/banana/comments, return
 // test9
 // I would maybe add a test for what we would expect if there is a valid review but with no comments
 
-// describe.only("test10. POST /api/articles/:article_id/comments", () => {
-//   test("status:201, responds with a newly created comment", () => {
-//     const newComment = {
-//       username: "Jess Jelly",
-//       body: "YO",
-//     };
-//     return request(app)
-//       .post("/api/articles/1/comments")
-//       .send(newComment)
-//       .expect(201)
-//       .then(({ body }) => {
-//         const { comment } = body;
-//         expect(comment).toBeInstanceOf(Array);
-//         expect(comment).toHaveLength(1);
-//         comment.forEach((eachComment) => {
-//           expect(eachComment).toEqual(
-//             expect.objectContaining({
-//               comment_id: 2,
-//               body: "YO",
-//               article_id: 1,
-//               author: "Jess Jelly",
-//               votes: 0,
-//               created_at: expect.any(String),
-//             })
-//           );
-//         });
-//       });
-//   });
-// });
-// test("status:404, responds with an error message when insert invalid username ", () => {
-//   const newComment = {
-//     author: "Adam",
-//     body: "YO",
-//   };
-//   return request(app)
-//     .post("/api/articles/1/comments")
-//     .send(newComment)
-//     .expect(404)
-//     .then(({ body }) => {
-//       expect(body.msg).toBe("username not found");
-//     });
-// });
+describe("test10. POST /api/articles/:article_id/comments", () => {
+  test("status:201, responds with a newly created comment", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "YO",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toBeInstanceOf(Array);
+        expect(comment).toHaveLength(1);
+        comment.forEach((eachComment) => {
+          expect(eachComment).toEqual(
+            expect.objectContaining({
+              comment_id: 19,
+              body: "YO",
+              article_id: 1,
+              author: "icellusedkars",
+              votes: 0,
+              created_at: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
+test("status:404, responds with an error message 'Invalid input entered' ", () => {
+  const newComment = {
+    username: "icellusedkars",
+    body: "hello world",
+  };
+  return request(app)
+    .post("/api/articles/9999/comments")
+    .send(newComment)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Not Found");
+    });
+});
 
-// test("status:400, responds with an error message 'Invalid input entered' ", () => {
-//   return request(app)
-//     .post("/api/articles/1/comments")
-//     .expect(400)
-//     .then(({ body }) => {
-//       expect(body.msg).toBe("Missing required fields");
-//     });
-// });
-// test("status:400, responds with an error message 'Bad input, please try again' ", () => {
+test("status:400, responds with an error message when passing an empy object ", () => {
+  const newComment = {};
+  return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Missing required fields");
+    });
+});
+test("status:404, responds with an error message 'Bad input, please try again' ", () => {
+  const newComment = {
+    username: "Adam",
+    body: "hello world",
+  };
+  return request(app)
+    .post("/api/articles/1/comments")
+    .expect(404)
+    .send(newComment)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Not Found");
+    });
+});
+
+test("status:400, responds with an error message 'Bad input, please try again' ", () => {
+  const newComment = {
+    username: "icellusedkars",
+    body: "hello world",
+  };
+  return request(app)
+    .post("/api/articles/banana/comments")
+    .expect(400)
+    .send(newComment)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad request, invalid article id");
+    });
+});
+// test("status:400, responds with an error message when insert 1111111 body input in body ", () => {
 //   const newComment = {
-//     article_id: 1,
-//     author: null,
-//     body: "hello world",
+//     username: "icellusedkars",
+//     body: 11111,
 //   };
 //   return request(app)
 //     .post("/api/articles/1/comments")
-//     .expect(400)
 //     .send(newComment)
-//     .then(({ body }) => {
-//       expect(body.message).toBe("Invalid input entered");
-//     });
-// });
-// test("status:400, responds with an error message 'Bad input, please try again' ", () => {
-//   const newComment = {
-//     article_id: 1,
-//     author: "Jess Jelly",
-//     body: "hello world",
-//   };
-//   return request(app)
-//     .post("/api/articles/banana/comments")
 //     .expect(400)
-//     .send(newComment)
 //     .then(({ body }) => {
-//       expect(body.message).toBe("Invalid id");
+//       expect(body.msg).toBe("Invalid input");
 //     });
 // });
 

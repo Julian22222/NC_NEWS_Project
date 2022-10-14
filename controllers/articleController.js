@@ -25,21 +25,21 @@ exports.patchArticleId = (request, response, next) => {
     .catch(next);
 };
 
-// exports.getAllArticles = (request, response, next) => {
-//   if (request.query.topic) {
-//     // console.log(request.query.topic);
-//     listOfArticles(topic)
-//       .then((rows) => {
-//         response.status(200).send(rows);
-//       })
-//       .catch(next);
-//   }
-// };
-
 exports.getAllArticles = (request, response, next) => {
-  listOfArticles(request.query.topic)
+  const {
+    query: { topic },
+  } = request;
+  listOfArticles(topic)
     .then((rows) => {
       response.status(200).send(rows);
     })
     .catch(next);
 };
+
+// exports.getAllArticles = (request, response, next) => {
+//   listOfArticles(request.query.topic)
+//     .then((rows) => {
+//       response.status(200).send(rows);
+//     })
+//     .catch(next);
+// };

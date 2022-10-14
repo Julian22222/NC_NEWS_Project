@@ -25,17 +25,12 @@ exports.commentsById = (article_id) => {
 };
 
 exports.addComment = (newComment, article_id) => {
-  //   const { username, body } = newComment;
-  //   console.log(newComment, article_id);
-  // console.log--> { username: 'Jess Jelly', body: 'YO' } 1
-  console.log(newComment.username, newComment.body, article_id);
-
-  if (!author && !body) {
-    return Promise.reject({
-      status: 400,
-      msg: "Invalid input entered",
-    });
-  }
+  //   if (newComment.body !== "string") {
+  //     return Promise.reject({
+  //       status: 400,
+  //       msg: "Invalid input",
+  //     });
+  //   }
 
   return db
     .query(
@@ -44,7 +39,6 @@ exports.addComment = (newComment, article_id) => {
       [newComment.username, newComment.body, article_id]
     )
     .then(({ rows }) => {
-      console.log(rows);
       return rows;
     });
 };
