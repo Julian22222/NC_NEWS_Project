@@ -515,14 +515,29 @@ describe("9. test11.get /api/articles queries", () => {
   });
 });
 
-// describe("10. test12. delete /api/comments/:comment_id", () => {
-//   test("status:204, No content status, delete the given comment by comment_id", () => {
-//     return request(app).delete("/api/comments/1").expect(204);
-//   });
-//   test("status:204, use invalid input for comment_id", () => {
-//     return request(app).delete("/api/comments/99999").expect(404);
-//   });
-//   test("status:204, use banana input for comment_id", () => {
-//     return request(app).delete("/api/comments/banana").expect(400);
-//   });
-// });
+describe("10 test12.delete /api/comments/:comment_id deletes comment on given comment id and returns an empty object", () => {
+  test("status:204, No content status, delete the given comment by comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("status: 400, responds with an error message when passed an invalid id", () => {
+    return request(app)
+      .delete("/api/comments/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad request, invalid article id");
+      });
+  });
+  test("status: 404, responds with an error message when passed a valid id but comment object is empty", () => {
+    return request(app)
+      .delete("/api/comments/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment not found");
+      });
+  });
+});

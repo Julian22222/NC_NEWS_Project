@@ -67,6 +67,10 @@ exports.listOfArticles = (sort_by = "created_at", order = "desc", topic) => {
   // console.log(articleSortBy.includes(sort_by));
   const validOrder = ["asc", "desc"];
   const topicNames = ["cats", "mitch", "paper", undefined];
+  // db.query("SELECT slug FROM topics").then((data) => {
+  // console.log(data);
+  // use select all
+  // });
 
   if (!topicNames.includes(topic)) {
     return Promise.reject({ status: 400, msg: "Invalid topic value" });
@@ -96,7 +100,6 @@ exports.listOfArticles = (sort_by = "created_at", order = "desc", topic) => {
   let fullQuery = startquery + midQuery + endquery;
 
   return db.query(fullQuery).then(({ rows }) => {
-    console.log(rows);
     return rows;
   });
 };
