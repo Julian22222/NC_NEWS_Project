@@ -66,7 +66,15 @@ exports.listOfArticles = (sort_by = "created_at", order = "desc", topic) => {
   ];
   // console.log(articleSortBy.includes(sort_by));
   const validOrder = ["asc", "desc"];
-  const topicNames = ["cats", "mitch", "paper", undefined];
+  const topicNames = [
+    "cats",
+    "mitch",
+    "paper",
+    "coding",
+    "football",
+    "cooking",
+    undefined,
+  ];
   // db.query("SELECT slug FROM topics").then((data) => {
   // console.log(data);
   // use select all
