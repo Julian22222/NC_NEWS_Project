@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
 const { getTopics } = require("./controllers/topicsController");
@@ -29,6 +30,8 @@ app.get("/api/articles/:article_id/comments", getComments);
 app.post("/api/articles/:article_id/comments", postComments);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.use(cors());
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
