@@ -16,6 +16,10 @@ const {
   deleteComment,
 } = require("./controllers/commentsController");
 
+app.get("/", (req, res) => {
+  console.log("Yooo");
+});
+
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleId);
