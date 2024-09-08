@@ -17,6 +17,7 @@ const {
 } = require("./controllers/commentsController");
 
 app.get("/", (req, res) => {
+  res.send("yoyoy");
   console.log("Yooo");
 });
 
