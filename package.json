@@ -6,7 +6,7 @@
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
-    "test": "jest",
+    "test": "NODE_ENV=production jest",
     "start": "node listen.js ",
     "prepare": "husky install",
     "seed-prod": "NODE_ENV=production npm run seed"
