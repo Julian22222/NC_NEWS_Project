@@ -19,6 +19,12 @@ const config =
         connectionString: process.env.DATABASE_URL,
         max: 2,
       }
-    : {};
+    : {
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        database: process.env.PGDATABASE,
+        port: process.env.DB_PORT,
+      };
 
 module.exports = new Pool(config);
