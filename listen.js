@@ -1,5 +1,5 @@
 const app = require("./app");
 
-const { PORT = 9030 } = process.env; // If PORT is not set, default to 9030
+const { PORT = 9030 } = process.env; // If PORT is not set, the default value = 9030 / destructuring the PORT value from process.env.
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}...`));

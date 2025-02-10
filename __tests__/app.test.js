@@ -1,5 +1,5 @@
 const app = require("../app");
-
+require("dotenv").config();
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
