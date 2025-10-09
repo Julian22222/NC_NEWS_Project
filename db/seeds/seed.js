@@ -71,14 +71,25 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     .then((result) => result.rows);
 
   //  //const format = require("pg-format"); - Used to interact with DB when post,put or patch, à format('INSERT INTO….`);  OR  format(UPDATE ….`);   OR  format(PATCH ….`);
+  // %L is a placeholder for formatting multiple values as a list in SQL — it’s often provided by libraries like pg-format in Node.js. Multiple values are comming from userData array of objects that we1 map be1low.
+  // We use %L here because we are inserting multiple rows at once, so the SQL will look like: INSERT INTO users (username, name, avatar_url) VALUES ('tickle122', 'Tom Tickle', 'url1'), ('grumpy19', 'Paul Grump', 'url2'), ('happyamy2016', 'Amy Happy', 'url3') RETURNING *;
+  //Without pg-format library, %L is just a plain string in your query and won't be replaced or escaped. This means your query would be invalid or unsafe (risk of SQL injection) if you just put %L directly into the query string without processing it.
+  // %L <--This placeholder safely converts your array of arrays into the SQL syntax for multiple rows of values, escaping values properly to avoid SQL injection.
+  //pg-format takes that array-of-arrays and automatically converts it into the properly escaped string with the parentheses and commas between rows and quotes around values. That’s why %L is useful!
+  //What Does RETURNING * Do? --> After inserting the rows, RETURNING * tells the database to return all columns of the newly inserted rows. This is useful if you want to see what was added, including any default values or auto-generated IDs.
+  //What Does RETURNING * Do? --> After inserting the users, the database will return all columns of the inserted rows. This lets you immediately get the inserted records, including any default values or generated IDs
   const insertUsersQueryStr = format(
-    "INSERT INTO users ( username, name, avatar_url) VALUES %L RETURNING *;",
+    "INSERT INTO users ( username, name, avatar_url) VALUES %L RETURNING *;", //<-- %L is a placeholder for a list of values, %L <-- we insert multiple rows at once, so the SQL will look like: INSERT INTO users (username, name, avatar_url) VALUES ('tickle122', 'Tom Tickle', 'url1'), ('grumpy19', 'Paul Grump', 'url2'), ('happyamy2016', 'Amy Happy', 'url3') RETURNING *;
     userData.map(({ username, name, avatar_url }) => [
+      //userData is your array of user objects.that you pass to the seed function. We use map to transform each user object into an array of values corresponding to the columns in the users table. map is a JavaScript array method that creates a new array by transforming each item.
+      //For each user object, you extract only the values needed for your query: username, name, avatar_url. Then you create an array with these values: [username, name, avatar_url].
       username,
       name,
       avatar_url,
     ])
   );
+  //So the entire .map() produces an array of arrays, like: [ ['tickle122', 'Tom Tickle', 'url1'], ['grumpy19', 'Paul Grump', 'url2'], ['happyamy2016', 'Amy Happy', 'url3'] ]
+
   const usersPromise = db
     .query(insertUsersQueryStr)
     .then((result) => result.rows);
